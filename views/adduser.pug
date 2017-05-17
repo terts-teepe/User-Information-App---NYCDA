@@ -8,13 +8,16 @@ html
 						a(href='/') Home
 				li.search
 						a.active(href='search') Search
-				li.sign-up
-						a(href='userCreate') Sign up
 			h1 Sign up now!
-			form(action="/" method="Post")
+			form(action="/adduser" method="post")
 				div.input
 				span.label
 				p Firstname
 				input(type="text", name="firstname")
 				p Lastname
+				input(type="text", name="lastname")
+				p Email
+				input(type="text", name="email")
+				div.actions
+				input(type="submit", value="submit")
 
