@@ -1,10 +1,41 @@
-htnml
+html
 	head
 		title Search User
+		script(src='js/jquery-3.2.1.js')
 	body
 		h1 Search User
-		form(method='POST', action='/search')
+		form(method='POST', action='/search' autocomplete='off' onsubmit='time')
 			p Search Name:
-				input(type='text', name='searchQuery', value='Viktor')
+				input(type='text', name='searchQuery', value='Viktor' onkeyup="sendPostRequestWhenUserTypes(this.value)" list="suggestion")
+				datalist#suggestion
+					option#box(value="")
 			p
 				input(type='submit', value='Search')
+
+
+		script.
+			
+
+			var time = Date.now();
+			function sendPostRequestWhenUserTypes(typedIn) {
+				console.log(Date.now()-time);
+				if (Date.now()-time > 300) {
+					$.post("/suggestionfinder", {typedIn: typedIn}, function(data, status){
+						console.log(data)
+						document.getElementById('box').value = data
+					})
+				}
+
+				time = Date.now();
+			}
+
+
+
+			
+
+
+
+
+			
+
+			

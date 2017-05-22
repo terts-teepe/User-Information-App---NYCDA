@@ -1,10 +1,18 @@
 html
 	head
-		title Use Database
+		title User Database
 	body
-		h1 User Database:
+		if (users.length) === 0
+			h1 User Not Found!
+		else
+			h1 User Found!
 		each user in users
 			p First name is: #{user.firstname}
 			p Last name is: #{user.lastname}
 			p Email is: #{user.email}
 			br
+
+
+
+
+
