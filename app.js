@@ -1,11 +1,14 @@
 
-const app = require('express')();
+const express = require('express');
+const app = express();
 const fs = require('fs');
 const bodyParser = require('body-parser');
 
 app.set('views', 'views');
 app.set('view engine', 'pug');
+
 app.use('/', bodyParser()); //activates middleware of body-parser -- request.body is nu beschikbaar onder elke app.post
+app.use('/', express.static('public'))
 
 var parse = {}
 
@@ -38,7 +41,7 @@ fs.readFile('./users.json', 'utf-8', (err, data) => {
 		console.log(userInput);
 
 		for (let i = 0; i<parsedData.length; i++) {
-			if (parsedData[i].firstname === userInput || parsedData[i].lastname === userInput) {
+			if (parsedData[i].firstname+ " " + parsedData[i].lastname === userInput || parsedData[i].firstname === userInput || parsedData[i].lastname === userInput) {
 				searchResult.push(parsedData[i]);
 			}
 		}
@@ -78,7 +81,23 @@ fs.readFile('./users.json', 'utf-8', (err, data) => {
 			response.redirect('/')
 
 	})
-})
+
+	// route 6: Compares usersinput (typedIn) with the database and gives suggestion if it finds a mach.
+	app.post('/suggestionfinder', (request, response) => {
+		var sugg = "";
+		var typedIn = request.body.typedIn;
+		console.log(request.body.typedIn);
+		// response.send('confirming, route works');
+
+		for (i=0; i<parsedData.length; i++) {
+			if (typedIn === parsedData[i].firstname.slice(0, typedIn.length) || typedIn === parsedData[i].lastname.slice(0, typedIn.length)) {
+				sugg = parsedData[i].firstname + " " + parsedData[i].lastname
+			}
+		}
+
+		response.send(sugg);
+	});
+});
 
 const listener = app.listen(3000, () => {
 	console.log('server had started at ', listener.address().port)
